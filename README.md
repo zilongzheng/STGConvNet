@@ -47,7 +47,7 @@ tensorboard --log ./output/fire_pot/log
         author = {Jianwen Xie and Song-Chun Zhu and Yingnian Wu},
         title = {Synthesizing Dynamic Patterns by Spatial-Temporal Generative ConvNet},
         journal = {arXiv preprint arXiv:1606.00972},
-        year = {2017}
+        year = {2016}
     }
 
 For any questions, please contact Jianwen Xie (jianwen@ucla.edu) and Zilong Zheng (zilongzheng@cs.ucla.edu).
