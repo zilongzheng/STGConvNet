@@ -1,9 +1,9 @@
 # Synthesizing Dynamic Patterns by Spatial-Temporal Generative ConvNet
-This repository contains a tensorflow implementation for the paper "Synthesizing Dynamic Patterns by Spatial-Temporal Generative ConvNet"(http://www.stat.ucla.edu/~jxie/STGConvNet/STGConvNet_file/doc/STGConvNet.pdf).
+This repository contains a tensorflow implementation for the paper "[Synthesizing Dynamic Patterns by Spatial-Temporal Generative ConvNet](http://www.stat.ucla.edu/~jxie/STGConvNet/STGConvNet_file/doc/STGConvNet.pdf)".
 
 http://www.stat.ucla.edu/~jxie/STGConvNet/STGConvNet.html
 
-[](output/sample.gif)!
+![fire_pot](output/sample.gif)
 
 ## Requirements
 
