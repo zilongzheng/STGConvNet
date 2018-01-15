@@ -3,7 +3,9 @@ This repository contains a tensorflow implementation for the paper "[Synthesizin
 
 http://www.stat.ucla.edu/~jxie/STGConvNet/STGConvNet.html
 
-![fire_pot](result/sample.gif)
+![fire_pot](result/fire_pot.gif =100x)
+![fire_pot](result/flowing_water.gif =100x)
+
 
 ## Requirements
 
