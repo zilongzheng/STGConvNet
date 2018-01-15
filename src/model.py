@@ -10,10 +10,11 @@ from progressbar import ETA, Bar, Percentage, ProgressBar
 class STGConvnet(object):
     def __init__(self, sess, config):
         self.sess = sess
+        self.net_type = 'FC_S_large'
         self.batch_size = config.batch_size
         self.image_size = config.image_size
         self.num_frames = config.num_frames
-        self.sample_batch = config.sample_batch
+        self.num_chain = config.num_chain
         self.num_epochs = config.num_epochs
 
         self.lr = config.lr
@@ -35,22 +36,57 @@ class STGConvnet(object):
             tf.gfile.DeleteRecursively(self.log_dir)
         tf.gfile.MakeDirs(self.log_dir)
 
-        self.syn = tf.placeholder(shape=[self.sample_batch, self.num_frames, self.image_size, self.image_size, 3], dtype=tf.float32)
+        self.syn = tf.placeholder(shape=[self.num_chain, self.num_frames, self.image_size, self.image_size, 3], dtype=tf.float32)
         self.obs = tf.placeholder(shape=[None, self.num_frames, self.image_size, self.image_size, 3], dtype=tf.float32)
 
 
     def descriptor(self, inputs, reuse=False):
         with tf.variable_scope('des', reuse=reuse):
-            conv1 = conv3d(inputs, 120, (7, 7, 7), strides=(2, 2, 2), padding="SAME", name="conv1")
-            conv1 = tf.nn.relu(conv1)
+            if self.net_type == 'ST':
+                """
+                This is the spatial temporal model used for synthesizing dynamic textures with both spatial and temporal 
+                stationarity. e.g. sea, ocean.
+                """
+                conv1 = conv3d(inputs, 120, (15, 15, 15), strides=(7, 7, 7), padding="SAME", name="conv1")
+                conv1 = tf.nn.relu(conv1)
 
-            conv2 = conv3d(conv1, 30, (5, 50, 50), strides=(2, 2, 2), padding=(2, 0, 0), name="conv2")
-            conv2 = tf.nn.relu(conv2)
+                conv2 = conv3d(conv1, 40, (7, 7, 7), strides=(3, 3, 3), padding="SAME", name="conv2")
+                conv2 = tf.nn.relu(conv2)
 
-            conv3 = conv3d(conv2, 5, (2, 1, 1), strides=(1, 2, 2), padding=(1, 0, 0), name="conv3")
-            conv3 = tf.nn.relu(conv3)
+                conv3 = conv3d(conv2, 20, (2, 3, 3), strides=(1, 2, 2), padding="SAME", name="conv3")
+                conv3 = tf.nn.relu(conv3)
+                return conv3
+            elif self.net_type == 'FC_S':
+                """
+                This is the spatial fully connected model used for synthesizing dynamic textures with only temporal 
+                stationarity with image size of 100. e.g. fire pot, flashing lights.
+                """
+                conv1 = conv3d(inputs, 120, (7, 7, 7), strides=(2, 2, 2), padding="SAME", name="conv1")
+                conv1 = tf.nn.relu(conv1)
 
-            return conv3
+                conv2 = conv3d(conv1, 30, (5, 50, 50), strides=(2, 2, 2), padding=(2, 0, 0), name="conv2")
+                conv2 = tf.nn.relu(conv2)
+
+                conv3 = conv3d(conv2, 5, (2, 1, 1), strides=(1, 2, 2), padding=(1, 0, 0), name="conv3")
+                conv3 = tf.nn.relu(conv3)
+
+                return conv3
+            elif self.net_type == 'FC_S_large':
+                """
+                This is the spatial fully connected model for images with size of 224.
+                """
+                conv1 = conv3d(inputs, 120, (7, 7, 7), strides=(3, 3, 3), padding="SAME", name="conv1")
+                conv1 = tf.nn.relu(conv1)
+
+                conv2 = conv3d(conv1, 30, (4, 75, 75), strides=(2, 1, 1), padding=(2, 0, 0), name="conv2")
+                conv2 = tf.nn.relu(conv2)
+
+                conv3 = conv3d(conv2, 5, (2, 1, 1), strides=(1, 1, 1), padding=(1, 0, 0), name="conv3")
+                conv3 = tf.nn.relu(conv3)
+
+                return conv3
+            else:
+                return NotImplementedError
 
     def langevin_dynamics(self, samples, gradient, batch_id):
         for i in range(self.sample_steps):
@@ -96,7 +132,7 @@ class STGConvnet(object):
         self.sess.run(tf.global_variables_initializer())
         self.sess.run(tf.local_variables_initializer())
 
-        sample_size = self.sample_batch * num_batches
+        sample_size = self.num_chain * num_batches
         sample_video = np.random.randn(sample_size, self.num_frames, self.image_size, self.image_size, 3)
 
         tf.summary.scalar('train_loss', train_loss_mean)
@@ -117,7 +153,7 @@ class STGConvnet(object):
             self.sess.run(reset_grads)
             for i in range(num_batches):
                 obs_data = train_data[i * self.batch_size:min(len(train_data), (i+1) * self.batch_size)]
-                syn = sample_video[i * self.sample_batch:(i+1) * self.sample_batch]
+                syn = sample_video[i * self.num_chain:(i+1) * self.num_chain]
 
                 syn = self.langevin_dynamics(syn, dLdI, i)
 
@@ -125,7 +161,7 @@ class STGConvnet(object):
 
                 self.sess.run(recon_err_update, feed_dict={self.obs: obs_data, self.syn: syn})
 
-                sample_video[i * self.sample_batch:(i + 1) * self.sample_batch] = syn
+                sample_video[i * self.num_chain:(i + 1) * self.num_chain] = syn
 
                 gradients.append(np.mean(grad))
             self.pbar.finish()
@@ -144,6 +180,6 @@ class STGConvnet(object):
                     os.makedirs(self.model_dir)
                 saver.save(self.sess, "%s/%s" % (self.model_dir, 'model.ckpt'), global_step=epoch)
 
-            if epoch % 10 == 0:
-                saveSampleVideo(sample_video + img_mean, self.result_dir)
+            if epoch % 20 == 0:
+                saveSampleVideo(sample_video + img_mean, self.result_dir, original=(train_data + img_mean), global_step=epoch)
 
