@@ -34,7 +34,9 @@ To synthesizing 3 different outputs of fire pot video with single video input(to
 python main.py -data_path ./trainingVideo -category fire_pot -output_dir ./output -im_size 224 -num_chain 3 -batch_size 1 -lr 0.001 -num_frames 70
 ```
 The synthesized videos will be stored in `./output/fire_pot/final_results` and images for each frame will be stored in
-`output/fire_pot/synthesized_sequence`. To output log information, run
+`./output/fire_pot/synthesized_sequence`.
+
+To output log information, run
 ```
 tensorboard --log ./output/fire_pot/log
 ```
