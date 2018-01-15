@@ -3,8 +3,8 @@ This repository contains a tensorflow implementation for the paper "[Synthesizin
 
 http://www.stat.ucla.edu/~jxie/STGConvNet/STGConvNet.html
 
-![](result/fire_pot.gif)
 ![](result/flowing_water.gif)
+![](result/fire_pot.gif)
 ![](result/lake.gif)
 
 
