@@ -29,9 +29,9 @@ We contains three different descriptor network in our `model.py`.
 |    FC_S    | Spatial fully-connected model for generating  dynamic textures with only temporal stationarity (Exp 2, image size 100) |
 | FC_S_large | Spatial fully-connected model for generating  dynamic textures with only temporal stationarity (Exp 2, image size 224, as described in paper) |
 
-To synthesizing 3 different outputs of fire pot video with single video input(top 70 frames):
+To synthesizing 3 different outputs of fire pot with single video input(top 70 frames):
 ```
-python main.py -data_path ./trainingVideo -category fire_pot -output_dir ./output -im_size 224 -num_chain 3 -batch_size 1 -lr 0.001 -num_frames 70
+python main.py -data_path ./trainingVideo -category fire_pot -output_dir ./output -sz 224 -num_chain 3 -batch_size 1 -lr 0.001 -num_frames 70
 ```
 The synthesized videos will be stored in `./output/fire_pot/final_results` and images for each frame will be stored in
 `./output/fire_pot/synthesized_sequence`.
