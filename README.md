@@ -3,14 +3,18 @@ This repository contains a tensorflow implementation for the paper "[Synthesizin
 
 http://www.stat.ucla.edu/~jxie/STGConvNet/STGConvNet.html
 
-![fire_pot](output/sample.gif)
+![fire_pot](result/sample.gif)
 
 ## Requirements
 
 We use `tensorflow` (version >= 1.0) in Python 2.7 as the main implementation framework. We use additional Python
-packages for reading and generating videos. To install, run
+packages for reading and saving images. To install, run
 ```
 pip install -r requirements.txt
+```
+We also use `ffmpeg` for reading and generating videos. To install, run
+```
+sudo sh ffmpeg_installer.sh
 ```
 
 ## Training
@@ -21,13 +25,13 @@ We contains three different descriptor network in our `model.py`.
 
 | model      | description |
 |------------| ----------------------------------------------------|
-|     ST     | Spatial-temporal model for generating dynamic textures with both spatial and temporal stationarity (Exp 1)|
-|    FC_S    | Spatial fully-connected model for generating  dynamic textures with only temporal stationarity (Exp 2) |
-| FC_S_large | Spatial fully-connected model for generating  dynamic textures with only temporal stationarity (Exp 2, described in paper) |
+|     ST     | Spatial-temporal model for generating dynamic textures with both spatial and temporal stationarity (Exp 1, image size 100)|
+|    FC_S    | Spatial fully-connected model for generating  dynamic textures with only temporal stationarity (Exp 2, image size 100) |
+| FC_S_large | Spatial fully-connected model for generating  dynamic textures with only temporal stationarity (Exp 2, image size 224, as described in paper) |
 
-To synthesizing 3 different outputs of fire pot video with single video input:
+To synthesizing 3 different outputs of fire pot video with single video input(top 70 frames):
 ```
-python main.py -data_path ./trainingVideo -category fire_pot -output_dir ./output -im_size 224 -num_chain 3 -batch_size 1 -lr 0.001
+python main.py -data_path ./trainingVideo -category fire_pot -output_dir ./output -im_size 224 -num_chain 3 -batch_size 1 -lr 0.001 -num_frames 70
 ```
 The synthesized videos will be stored in `./output/fire_pot/final_results` and images for each frame will be stored in
 `output/fire_pot/synthesized_sequence`. To output log information, run
