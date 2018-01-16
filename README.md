@@ -21,7 +21,7 @@ sudo sh ffmpeg_installer.sh
 Our current code has been tested on Ubuntu 14.04. Currently this repository only contains `fire_pot` in `trainingVideo`
 for the testing purpose. Other training videos can be downloaded [here](http://www.stat.ucla.edu/~jxie/STGConvNet/STGConvNet.html).
 
-We contains three different descriptor network in our `model.py`.
+We include three different descriptor networks in our `model.py`.
 
 | model      | description |
 |------------| ----------------------------------------------------|
