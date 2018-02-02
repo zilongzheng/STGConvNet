@@ -44,7 +44,7 @@ tensorboard --log ./output/fire_pot/log
 ## Reference
 
     @inproceedings{stgconvnet,
-        author = {Xie, Jianwen and Zhu, Song-Chun and Nian Wu, Ying},
+        author = {Xie, Jianwen and Zhu, Song-Chun and Wu, Ying Nian},
         title = {Synthesizing Dynamic Patterns by Spatial-Temporal Generative ConvNet},
         booktitle = {The IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
         month = {July},
