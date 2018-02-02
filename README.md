@@ -43,11 +43,12 @@ tensorboard --log ./output/fire_pot/log
 
 ## Reference
 
-    @article{Xie2016,
-        author = {Jianwen Xie and Song-Chun Zhu and Yingnian Wu},
+    @inproceedings{stgconvnet,
+        author = {Xie, Jianwen and Zhu, Song-Chun and Nian Wu, Ying},
         title = {Synthesizing Dynamic Patterns by Spatial-Temporal Generative ConvNet},
-        journal = {arXiv preprint arXiv:1606.00972},
-        year = {2016}
-    }
+        booktitle = {The IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+        month = {July},
+        year = {2017}
+    } 
 
 For any questions, please contact Jianwen Xie (jianwen@ucla.edu) and Zilong Zheng (zilongzheng@cs.ucla.edu).
