@@ -31,7 +31,7 @@ We include three different descriptor networks in our `model.py`.
 
 To synthesizing 3 different outputs of fire pot with single video input(top 70 frames):
 ```
-python main.py -data_path ./trainingVideo -category fire_pot -output_dir ./output -sz 224 -num_chain 3 -batch_size 1 -lr 0.001 -num_frames 70
+python main.py --data_dir ./trainingVideo --category fire_pot --output_dir ./output --image_size 224 --num_chain 3 --batch_size 1 --lr 0.001 --num_frames 70
 ```
 The synthesized videos will be stored in `./output/fire_pot/final_results` and images for each frame will be stored in
 `./output/fire_pot/synthesized_sequence`.
